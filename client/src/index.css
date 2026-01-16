@@ -11,5 +11,26 @@
   body {
     @apply bg-white text-gray-900 antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    /* Prevent double-tap zoom on iOS */
+    touch-action: manipulation; 
+  }
+
+  /* Improved Touch Targets for iPad/Mobile */
+  input, select, textarea, button {
+    @apply outline-none;
+    /* Prevent iOS zoom on focus by ensuring font-size is legible */
+    font-size: 16px; 
+  }
+}
+
+@layer components {
+  /* Helper for touch-friendly buttons */
+  .btn-touch {
+    @apply min-h-[44px] flex items-center justify-center;
+  }
+  
+  /* Helper for touch-friendly inputs */
+  .input-touch {
+    @apply min-h-[44px] p-3 text-base;
   }
 }

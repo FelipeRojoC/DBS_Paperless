@@ -39,6 +39,19 @@ const seedDatabase = async () => {
             }
         }
 
+        // Create specific Supervisor User as requested
+        const supervisorEmail = 'supervisor@dbs.com';
+        const supervisorCheck = await pool.query('SELECT * FROM users WHERE email = $1', [supervisorEmail]);
+        if (supervisorCheck.rows.length === 0) {
+            await pool.query(
+                'INSERT INTO users (email, password_hash, full_name, role) VALUES ($1, $2, $3, $4)',
+                [supervisorEmail, passwordHash, 'Supervisor General', 'Jefe de Calidad']
+            );
+            console.log(`✅ Created SUPERVISOR user: ${supervisorEmail} (Jefe de Calidad)`);
+        } else {
+            console.log(`⚠️ User existing: ${supervisorEmail}`);
+        }
+
 
         // Create Form Templates
         const templates = [

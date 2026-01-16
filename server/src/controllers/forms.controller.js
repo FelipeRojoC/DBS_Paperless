@@ -2,15 +2,18 @@ const { pool } = require('../db');
 
 // Create a new form submission
 const submitForm = async (req, res) => {
-    const { template_id, service_order_id, technician_id, form_data } = req.body;
+    const { template_id, service_order_id, technician_id, form_data, status } = req.body;
+
+    // Default status to 'submitted' if not provided
+    const submissionStatus = status || 'submitted';
 
     try {
         const result = await pool.query(
             `INSERT INTO form_submissions 
       (template_id, service_order_id, technician_id, status, form_data) 
-      VALUES ($1, $2, $3, 'submitted', $4) 
+      VALUES ($1, $2, $3, $4, $5) 
       RETURNING *`,
-            [template_id, service_order_id, technician_id, form_data]
+            [template_id || 1, service_order_id || 'SO-000', technician_id || 1, submissionStatus, form_data]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {

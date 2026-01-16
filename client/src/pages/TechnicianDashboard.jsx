@@ -7,8 +7,19 @@ export default function TechnicianDashboard() {
     const navigate = useNavigate()
     // Get user from localStorage or default
     const userName = localStorage.getItem("dbs_user_name") || "Juan Rodríguez"
+    const userRole = localStorage.getItem("dbs_user_role") || "Técnico Mecánico"
     const userInitials = userName.slice(0, 2).toUpperCase()
     const [recentForms, setRecentForms] = useState([])
+
+    const handleLogout = () => {
+        localStorage.removeItem("dbs_user_tokan"); // Typo in original login? Standardize
+        localStorage.removeItem("dbs_user_name");
+        localStorage.removeItem("dbs_user_role");
+        localStorage.removeItem("token"); // Just in case
+        navigate('/login');
+    };
+
+    const isSupervisor = userRole.toLowerCase().includes('supervisor') || userRole.toLowerCase().includes('jefe');
 
     useEffect(() => {
         const fetchForms = async () => {
@@ -51,12 +62,12 @@ export default function TechnicianDashboard() {
                         <div className="flex items-center gap-3 pl-2">
                             <div className="text-right hidden md:block">
                                 <p className="text-sm font-bold text-gray-900">{userName}</p>
-                                <p className="text-xs text-gray-500">Técnico Mecánico</p>
+                                <p className="text-xs text-gray-500">{userRole}</p>
                             </div>
-                            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-                                <span className="text-sm font-bold text-gray-700">{userInitials}</span>
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 border-white shadow-sm ${isSupervisor ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-700'}`}>
+                                <span className="text-sm font-bold">{userInitials}</span>
                             </div>
-                            <button className="text-gray-400 hover:text-red-600 transition-colors ml-2">
+                            <button onClick={handleLogout} className="text-gray-400 hover:text-red-600 transition-colors ml-2" title="Cerrar Sesión">
                                 <LogOut className="w-5 h-5" />
                             </button>
                         </div>
@@ -125,7 +136,8 @@ export default function TechnicianDashboard() {
                         Crear Nuevo Formulario
                     </h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Responsive Grid: 1 col mobile, 2 cols tablet, 3 cols desktop */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                         {/* Card 1: Seguridad (Red) */}
                         <div
@@ -206,7 +218,7 @@ export default function TechnicianDashboard() {
                                     R3
                                 </button>
                                 <button
-                                    onClick={(e) => { e.stopPropagation(); window.open('https://share.teamforms.app/form/NmZmOGNlMGItOGQzMy00ZDJhLTg3OWEtNmU2MmY0MDI1OWNkOjcwMzg4MWYxLTRhOGQtNDBjYy1hMjI3LTYxODE3ZTUxMzI4YTpiMjc5OWUwNi1mMTVmLTRkMWEtODU2My05YTA2ZmYzZmYxMGE=', '_blank'); }}
+                                    onClick={(e) => { e.stopPropagation(); navigate('/technician/r7'); }}
                                     className="px-3 py-1.5 text-xs font-semibold bg-gray-50 text-gray-700 rounded-lg border border-gray-200 hover:bg-sky-500 hover:text-white hover:border-sky-500 transition-all"
                                 >
                                     R7
@@ -243,20 +255,20 @@ export default function TechnicianDashboard() {
                             </div>
                         ) : (
                             recentForms.map((form) => (
-                                <div key={form.id} className="p-4 hover:bg-gray-50 transition-colors flex items-center gap-4 cursor-pointer">
-                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
-                                        <FileText className="w-5 h-5" />
+                                <div key={form.id} className="p-4 hover:bg-gray-50 transition-colors flex items-center gap-4 cursor-pointer min-h-[72px]">
+                                    <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 shrink-0">
+                                        <FileText className="w-6 h-6" />
                                     </div>
                                     <div className="flex-grow">
-                                        <h5 className="text-sm font-bold text-gray-900">{form.form_data?.title || "Formulario Sin Título"}</h5>
-                                        <p className="text-xs text-gray-500">
+                                        <h5 className="text-base font-bold text-gray-900">{form.form_data?.title || "Formulario Sin Título"}</h5>
+                                        <p className="text-sm text-gray-500">
                                             {new Date(form.created_at).toLocaleDateString()} • {form.form_name || 'AST'}
                                         </p>
                                     </div>
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium border ${form.status === 'approved' ? 'bg-green-100 text-green-700 border-green-200' :
-                                            form.status === 'rejected' ? 'bg-red-100 text-red-700 border-red-200' :
-                                                'bg-yellow-100 text-yellow-700 border-yellow-200'
-                                        }`}>
+                                        form.status === 'rejected' ? 'bg-red-100 text-red-700 border-red-200' :
+                                            'bg-yellow-100 text-yellow-700 border-yellow-200'
+                                        } shrink-0`}>
                                         {form.status === 'approved' ? 'Aprobado' :
                                             form.status === 'rejected' ? 'Rechazado' : 'Pendiente'}
                                     </span>

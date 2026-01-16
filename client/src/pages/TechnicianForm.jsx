@@ -134,7 +134,7 @@ export default function TechnicianForm({ onBack }) {
                                 type="text"
                                 value={formData.title}
                                 onChange={(e) => handleInputChange('title', e.target.value)}
-                                className="w-full mt-1 p-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-[#E42313] outline-none transition-colors font-medium"
+                                className="w-full mt-1 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-[#E42313] outline-none transition-colors font-medium text-base input-touch"
                                 placeholder="Ej: Mantenimiento Preventivo Cinta 3"
                             />
                         </div>
@@ -144,7 +144,7 @@ export default function TechnicianForm({ onBack }) {
                             <select
                                 value={formData.area}
                                 onChange={(e) => handleInputChange('area', e.target.value)}
-                                className="w-full mt-1 p-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-[#E42313] outline-none font-medium"
+                                className="w-full mt-1 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-[#E42313] outline-none font-medium text-base input-touch"
                             >
                                 <option value="">Seleccionar...</option>
                                 <option value="mecanica">Mecánica</option>
@@ -159,7 +159,7 @@ export default function TechnicianForm({ onBack }) {
                                 type="text"
                                 value={formData.location}
                                 onChange={(e) => handleInputChange('location', e.target.value)}
-                                className="w-full mt-1 p-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-[#E42313] outline-none font-medium"
+                                className="w-full mt-1 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-[#E42313] outline-none font-medium text-base input-touch"
                                 placeholder="Ej: Nave Principal, Sector B"
                             />
                         </div>
@@ -248,7 +248,7 @@ export default function TechnicianForm({ onBack }) {
                                             placeholder="Ej: Caída a mismo nivel"
                                             value={risk.description}
                                             onChange={(e) => updateRisk(risk.id, 'description', e.target.value)}
-                                            className="w-full mt-1 p-2 bg-white rounded-lg border border-gray-200 text-sm focus:border-orange-400 outline-none"
+                                            className="w-full mt-1 p-4 bg-white rounded-lg border border-gray-200 text-sm focus:border-orange-400 outline-none min-h-[44px]"
                                         />
                                     </div>
 
@@ -257,7 +257,7 @@ export default function TechnicianForm({ onBack }) {
                                         <select
                                             value={risk.severity}
                                             onChange={(e) => updateRisk(risk.id, 'severity', e.target.value)}
-                                            className="w-full mt-1 p-2 bg-white rounded-lg border border-gray-200 text-sm focus:border-orange-400 outline-none"
+                                            className="w-full mt-1 p-4 bg-white rounded-lg border border-gray-200 text-sm focus:border-orange-400 outline-none min-h-[44px]"
                                         >
                                             <option>Baja</option>
                                             <option>Media</option>
@@ -272,7 +272,7 @@ export default function TechnicianForm({ onBack }) {
                                             placeholder="Ej: Orden y Limpieza"
                                             value={risk.control}
                                             onChange={(e) => updateRisk(risk.id, 'control', e.target.value)}
-                                            className="w-full mt-1 p-2 bg-white rounded-lg border border-gray-200 text-sm focus:border-orange-400 outline-none"
+                                            className="w-full mt-1 p-4 bg-white rounded-lg border border-gray-200 text-sm focus:border-orange-400 outline-none min-h-[44px]"
                                         />
                                     </div>
                                 </div>
@@ -289,7 +289,7 @@ export default function TechnicianForm({ onBack }) {
                             <button
                                 key={option.id}
                                 onClick={() => toggleEpp(option.id)}
-                                className={`p-3 rounded-xl border-2 text-sm font-bold transition-all flex items-center gap-2 ${selectedEpp.includes(option.id)
+                                className={`p-4 rounded-xl border-2 text-sm font-bold transition-all flex items-center gap-3 min-h-[50px] ${selectedEpp.includes(option.id)
                                     ? 'border-[#009A93] bg-[#009A93]/10 text-[#009A93]'
                                     : 'border-transparent bg-gray-50 text-gray-500 hover:bg-gray-100'
                                     }`}

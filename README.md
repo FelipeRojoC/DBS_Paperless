@@ -59,20 +59,8 @@ Para probar en Postman, configura una colección con la variable `{{url}}` = `ht
     ```
 *   **Respuesta**: Copia el `token` para usarlo en las siguientes peticiones (Authorization: Bearer <token>).
 
-### 2. Registro (Crear Usuario) 👤
-*   **Método**: `POST`
-*   **URL**: `http://localhost:3000/api/auth/register`
-*   **Body (JSON)**:
-    ```json
-    {
-      "email": "nuevo.usuario@dbs.com",
-      "password": "password123",
-      "full_name": "Pedro Pérez",
-      "role": "Soldador"
-    }
-    ```
 
-### 3. Enviar Formulario 📝
+### 2. Enviar Formulario 📝
 *   **Método**: `POST`
 *   **URL**: `http://localhost:3000/api/forms`
 *   **Headers**: `Authorization: Bearer TU_TOKEN_AQUI`
