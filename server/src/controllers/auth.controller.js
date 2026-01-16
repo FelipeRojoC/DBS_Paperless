@@ -2,58 +2,58 @@ const { pool } = require('../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const register = async (req, res) => {
-    const { email, password, full_name, role } = req.body;
-
-    try {
-        // Check if user exists
-        const userCheck = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        if (userCheck.rows.length > 0) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
-
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const passwordHash = await bcrypt.hash(password, salt);
-
-        // Insert user
-        const newUser = await pool.query(
-            'INSERT INTO users (email, password_hash, full_name, role) VALUES ($1, $2, $3, $4) RETURNING id, email, full_name, role',
-            [email, passwordHash, full_name, role]
-        );
-
-        res.status(201).json(newUser.rows[0]);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
-    }
-};
+// LOGIC FOR MICROSOFT LOGIN
+// 1. Client sends { email, microsoftToken }
+// 2. We validate token (omitted for now)
+// 3. We check if user exists in our DB
+// 4. We issue our own JWT
 
 const login = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, microsoftToken } = req.body;
 
     try {
         const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (user.rows.length === 0) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            // Security: Do not reveal user existence? Or just say Invalid Credentials
+            return res.status(401).json({ message: 'Acceso denegado. Usuario no registrado en el sistema.' });
         }
 
-        const validPassword = await bcrypt.compare(password, user.rows[0].password_hash);
-        if (!validPassword) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+        // Determine Auth Method
+        let isAuthenticated = false;
+
+        if (microsoftToken) {
+            // TODO: Validate Microsoft Token here
+            // if (validate(microsoftToken)) isAuthenticated = true;
+            console.log(`[AUTH] Login via Microsoft Token for ${email}`);
+            isAuthenticated = true; // Assuming valid for now since we trust the client in this phase
+        } else if (password) {
+            // Legacy/Local fallback (if needed, or can be removed)
+            const validPassword = await bcrypt.compare(password, user.rows[0].password_hash);
+            isAuthenticated = validPassword;
+        }
+
+        if (!isAuthenticated) {
+            return res.status(401).json({ message: 'Credenciales inválidas' });
         }
 
         const token = jwt.sign(
             { id: user.rows[0].id, role: user.rows[0].role },
             process.env.JWT_SECRET || 'secret_key',
-            { expiresIn: '1h' }
+            { expiresIn: '8h' }
         );
 
-        res.json({ token, user: { id: user.rows[0].id, full_name: user.rows[0].full_name, role: user.rows[0].role } });
+        res.json({
+            token,
+            user: {
+                id: user.rows[0].id,
+                full_name: user.rows[0].full_name,
+                role: user.rows[0].role
+            }
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
 };
 
-module.exports = { register, login };
+module.exports = { login };

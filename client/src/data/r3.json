@@ -1,0 +1,12 @@
+{
+    "form_code": "R3",
+    "title": "R3 - Evaluación Reductores",
+    "panels": [
+        {
+            "id": "panel_1",
+            "title": "Panel 1: Datos Iniciales",
+            "fields": [],
+            "requires_signature": true
+        }
+    ]
+}

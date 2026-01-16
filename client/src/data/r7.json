@@ -1,0 +1,12 @@
+{
+    "form_code": "R7",
+    "title": "R7 - Armado Reductores",
+    "panels": [
+        {
+            "id": "panel_1",
+            "title": "Panel 1: Identificación",
+            "fields": [],
+            "requires_signature": true
+        }
+    ]
+}
